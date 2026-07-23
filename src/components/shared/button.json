@@ -19,13 +19,16 @@
       "default": "_self"
     },
     "backgroundColor": {
-      "type": "string"
+      "type": "string",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
     },
     "color": {
-      "type": "string"
+      "type": "string",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
     },
     "borderColor": {
-      "type": "string"
+      "type": "string",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
     },
     "icon": {
       "type": "component",

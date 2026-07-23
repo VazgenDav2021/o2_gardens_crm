@@ -20,10 +20,12 @@
       "default": "_self"
     },
     "color": {
-      "type": "string"
+      "type": "string",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
     },
     "backgroundColor": {
-      "type": "string"
+      "type": "string",
+      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
     },
     "icon": {
       "type": "component",
