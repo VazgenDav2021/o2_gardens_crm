@@ -5,7 +5,7 @@
     "singularName": "menu",
     "pluralName": "menus",
     "displayName": "Menu",
-    "description": "Top-level menu entity (e.g. \"Main Menu\", \"Drinks Menu\")"
+    "description": "Top-level menu (e.g. Main Menu, Bar, Combo). Each menu has its own categories → subcategories → products."
   },
   "options": {
     "draftAndPublish": true
@@ -29,6 +29,21 @@
       "type": "uid",
       "targetField": "name",
       "required": true
+    },
+    "menuKind": {
+      "type": "enumeration",
+      "enum": ["main", "bar", "combo", "breakfast", "lunch", "delivery", "other"],
+      "default": "main",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "sortOrder": {
+      "type": "integer",
+      "default": 0
     },
     "categories": {
       "type": "relation",
