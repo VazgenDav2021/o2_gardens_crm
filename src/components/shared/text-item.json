@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_text_items",
+  "info": {
+    "displayName": "Text Item",
+    "icon": "paragraph",
+    "description": "Single text string, used for repeatable lists of text"
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

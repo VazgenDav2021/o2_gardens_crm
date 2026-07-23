@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_layout_contact_us",
+  "info": {
+    "displayName": "Contact Us",
+    "icon": "phone",
+    "description": "Contact section with info blocks and an embedded map"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "contactItems": {
+      "type": "component",
+      "component": "layout.contact-item",
+      "repeatable": true
+    },
+    "latitude": {
+      "type": "float"
+    },
+    "longitude": {
+      "type": "float"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_dropdowns",
+  "info": {
+    "displayName": "Dropdown",
+    "icon": "chevron-down",
+    "description": "Select dropdown with optional icon (e.g. language switcher)"
+  },
+  "attributes": {
+    "placeholder": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "component",
+      "component": "shared.icon",
+      "repeatable": false
+    },
+    "options": {
+      "type": "component",
+      "component": "shared.dropdown-option",
+      "repeatable": true
+    }
+  }
+}

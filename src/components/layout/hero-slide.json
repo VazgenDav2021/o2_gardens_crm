@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_layout_hero_slides",
+  "info": {
+    "displayName": "Hero Slide",
+    "icon": "picture",
+    "description": "Single slide for the hero slider: background, title, subtitle, and CTA button"
+  },
+  "attributes": {
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "backgroundColor": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "button": {
+      "type": "component",
+      "component": "shared.button",
+      "repeatable": false
+    }
+  }
+}

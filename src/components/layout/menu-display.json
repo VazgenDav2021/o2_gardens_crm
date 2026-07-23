@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_layout_menu_displays",
+  "info": {
+    "displayName": "Menu Display",
+    "icon": "book",
+    "description": "Renders a full menu (categories → subcategories → products) from the Menu content type"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "menu": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::menu.menu"
+    }
+  }
+}

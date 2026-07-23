@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_layout_sections",
+  "info": {
+    "displayName": "Section",
+    "icon": "grid",
+    "description": "Generic content section with title, subtitle, and a grid of cards"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "cards": {
+      "type": "component",
+      "component": "shared.card",
+      "repeatable": true
+    }
+  }
+}

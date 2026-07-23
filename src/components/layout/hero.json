@@ -1,0 +1,15 @@
+{
+  "collectionName": "components_layout_heroes",
+  "info": {
+    "displayName": "Hero",
+    "icon": "dashboard",
+    "description": "Full-width hero section with a multi-slide carousel"
+  },
+  "attributes": {
+    "slides": {
+      "type": "component",
+      "component": "layout.hero-slide",
+      "repeatable": true
+    }
+  }
+}

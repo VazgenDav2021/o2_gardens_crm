@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_layout_footer_columns",
+  "info": {
+    "displayName": "Footer Column",
+    "icon": "column",
+    "description": "One footer column: can contain plain text OR a list of links (use one or the other)"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "text"
+    },
+    "links": {
+      "type": "component",
+      "component": "shared.link",
+      "repeatable": true
+    }
+  }
+}

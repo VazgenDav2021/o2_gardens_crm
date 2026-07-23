@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_layout_navbars",
+  "info": {
+    "displayName": "Navbar",
+    "icon": "layer",
+    "description": "Site navigation bar with logo, links, and language switcher"
+  },
+  "attributes": {
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "links": {
+      "type": "component",
+      "component": "shared.link",
+      "repeatable": true
+    },
+    "languageDropdown": {
+      "type": "component",
+      "component": "shared.dropdown",
+      "repeatable": false
+    }
+  }
+}

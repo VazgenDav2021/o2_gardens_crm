@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_layout_contact_items",
+  "info": {
+    "displayName": "Contact Item",
+    "icon": "phone",
+    "description": "Single contact block: icon, title, and a list of text values"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "component",
+      "component": "shared.icon",
+      "repeatable": false
+    },
+    "texts": {
+      "type": "component",
+      "component": "shared.text-item",
+      "repeatable": true
+    }
+  }
+}

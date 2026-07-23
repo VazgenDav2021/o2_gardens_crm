@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_shared_icons",
+  "info": {
+    "displayName": "Icon",
+    "icon": "star",
+    "description": "Icon identifier (e.g. Heroicons or FontAwesome name)"
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
