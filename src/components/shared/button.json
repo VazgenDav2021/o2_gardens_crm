@@ -19,16 +19,16 @@
       "default": "_self"
     },
     "backgroundColor": {
-      "type": "string",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      "type": "customField",
+      "customField": "plugin::color-picker.color"
     },
     "color": {
-      "type": "string",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      "type": "customField",
+      "customField": "plugin::color-picker.color"
     },
     "borderColor": {
-      "type": "string",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      "type": "customField",
+      "customField": "plugin::color-picker.color"
     },
     "icon": {
       "type": "component",

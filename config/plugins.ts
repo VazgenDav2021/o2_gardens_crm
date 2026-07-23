@@ -1,4 +1,7 @@
 export default () => ({
+  'color-picker': {
+    enabled: true,
+  },
   graphql: {
     enabled: true,
     config: {

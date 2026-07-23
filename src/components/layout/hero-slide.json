@@ -12,8 +12,8 @@
       "allowedTypes": ["images"]
     },
     "backgroundColor": {
-      "type": "string",
-      "regex": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$"
+      "type": "customField",
+      "customField": "plugin::color-picker.color"
     },
     "title": {
       "type": "string"
