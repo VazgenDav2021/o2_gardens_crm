@@ -6,9 +6,6 @@
     "description": "Select dropdown with optional icon (e.g. language switcher)"
   },
   "attributes": {
-    "placeholder": {
-      "type": "string"
-    },
     "icon": {
       "type": "component",
       "component": "shared.icon",
