@@ -1,0 +1,63 @@
+name: o2-gardens-crm
+region: nyc
+
+services:
+  - name: strapi
+    dockerfile_path: Dockerfile
+    github:
+      repo: VazgenDav2021/o2_gardens_crm
+      branch: master
+      deploy_on_push: true
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    http_port: 1337
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: "0.0.0.0"
+      - key: PORT
+        value: "1337"
+      - key: PUBLIC_URL
+        value: https://grove.o2cafeandrestaurant.com
+      - key: DATABASE_CLIENT
+        value: postgres
+      - key: DATABASE_HOST
+        value: ${db.HOSTNAME}
+      - key: DATABASE_PORT
+        value: ${db.PORT}
+      - key: DATABASE_NAME
+        value: ${db.DATABASE}
+      - key: DATABASE_USERNAME
+        value: ${db.USERNAME}
+      - key: DATABASE_PASSWORD
+        value: ${db.PASSWORD}
+      - key: DATABASE_SSL
+        value: "true"
+      - key: DATABASE_SSL_REJECT_UNAUTHORIZED
+        value: "false"
+      # СЕКРЕТЫ: задать вручную в DO Console → App → Settings → Environment Variables
+      - key: APP_KEYS
+        type: SECRET
+      - key: API_TOKEN_SALT
+        type: SECRET
+      - key: ADMIN_JWT_SECRET
+        type: SECRET
+      - key: TRANSFER_TOKEN_SALT
+        type: SECRET
+      - key: JWT_SECRET
+        type: SECRET
+    routes:
+      - path: /
+
+databases:
+  - name: db
+    engine: PG
+    version: "15"
+    size: db-s-dev-database
+    num_nodes: 1
+
+domains:
+  - domain: grove.o2cafeandrestaurant.com
+    type: PRIMARY
+    zone: o2cafeandrestaurant.com
