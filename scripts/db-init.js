@@ -3,7 +3,6 @@ const { Client } = require('pg');
 async function init() {
   if (!process.env.DATABASE_URL) return;
 
-  // Strip sslmode from URL — we set SSL config explicitly below
   const dbUrl = new URL(process.env.DATABASE_URL);
   dbUrl.searchParams.delete('sslmode');
 
@@ -14,11 +13,10 @@ async function init() {
 
   try {
     await client.connect();
-    await client.query('GRANT ALL ON SCHEMA public TO CURRENT_USER');
-    await client.query('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO CURRENT_USER');
-    console.log('[db-init] Schema permissions granted successfully');
+    await client.query('CREATE SCHEMA IF NOT EXISTS strapi_app');
+    console.log('[db-init] Schema strapi_app ready');
   } catch (err) {
-    console.warn('[db-init] Permission grant warning:', err.message);
+    console.warn('[db-init] Warning:', err.message);
   } finally {
     await client.end();
   }
