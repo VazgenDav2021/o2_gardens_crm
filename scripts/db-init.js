@@ -13,8 +13,11 @@ async function init() {
 
   try {
     await client.connect();
-    await client.query('CREATE SCHEMA IF NOT EXISTS strapi_app');
-    console.log('[db-init] Schema strapi_app ready');
+    const result = await client.query('SELECT current_user, current_database()');
+    console.log('[db-init] Connected as:', result.rows[0].current_user, '/', result.rows[0].current_database);
+
+    await client.query('GRANT ALL ON SCHEMA public TO CURRENT_USER');
+    console.log('[db-init] GRANT succeeded');
   } catch (err) {
     console.warn('[db-init] Warning:', err.message);
   } finally {

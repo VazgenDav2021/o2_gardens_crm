@@ -38,7 +38,6 @@ export default ({ env }) => {
       client,
       connection,
       useNullAsDefault: true,
-      ...(databaseUrl ? { searchPath: ['strapi_app', 'public'] } : {}),
     },
   };
 };
