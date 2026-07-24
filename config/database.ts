@@ -33,17 +33,17 @@ export default ({ env }) => {
     };
   }
 
-  // PostgreSQL 15+ revoked CREATE on public schema from PUBLIC.
-  // Create a dedicated schema owned by the connecting user and set search_path
-  // so Strapi creates all tables there instead of in public.
   const pool = client === 'postgres' ? {
     afterCreate: (conn: any, done: (err: Error | null, conn: any) => void) => {
-      conn.query(
-        "CREATE SCHEMA IF NOT EXISTS strapi_app; SET search_path TO strapi_app, public",
-        (err: Error | null) => {
+      conn.query('CREATE SCHEMA IF NOT EXISTS strapi_app', (err1: Error | null) => {
+        if (err1) console.error('[db] CREATE SCHEMA failed:', err1.message);
+        else console.log('[db] strapi_app schema ready');
+        conn.query('SET search_path TO strapi_app, public', (err2: Error | null) => {
+          if (err2) console.error('[db] SET search_path failed:', err2.message);
+          else console.log('[db] search_path=strapi_app,public');
           done(null, conn);
-        }
-      );
+        });
+      });
     },
   } : undefined;
 
