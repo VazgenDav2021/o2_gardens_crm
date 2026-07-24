@@ -33,11 +33,20 @@ export default ({ env }) => {
     };
   }
 
+  const pool = client === 'postgres' ? {
+    afterCreate: (conn: any, done: (err: Error | null, conn: any) => void) => {
+      conn.query('GRANT ALL ON SCHEMA public TO CURRENT_USER', (err: Error | null) => {
+        done(null, conn);
+      });
+    },
+  } : undefined;
+
   return {
     connection: {
       client,
       connection,
       useNullAsDefault: true,
+      ...(pool ? { pool } : {}),
     },
   };
 };
