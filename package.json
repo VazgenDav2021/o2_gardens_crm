@@ -5,7 +5,7 @@
   "description": "O2 Gardens — Strapi CMS Backend",
   "scripts": {
     "develop": "strapi develop",
-    "start": "node scripts/db-init.js && strapi start",
+    "start": "strapi start",
     "build": "strapi build",
     "deploy": "strapi deploy",
     "strapi": "strapi"
