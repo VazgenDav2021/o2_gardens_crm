@@ -10,10 +10,12 @@ async function init() {
 
   try {
     await client.connect();
-    await client.query('GRANT CREATE ON SCHEMA public TO CURRENT_USER');
-    console.log('[db-init] Schema permissions granted');
+    await client.query('GRANT ALL ON SCHEMA public TO CURRENT_USER');
+    await client.query('GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO CURRENT_USER');
+    await client.query('ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO CURRENT_USER');
+    console.log('[db-init] Schema permissions granted successfully');
   } catch (err) {
-    console.warn('[db-init] Could not grant permissions:', err.message);
+    console.warn('[db-init] Permission grant warning:', err.message);
   } finally {
     await client.end();
   }
