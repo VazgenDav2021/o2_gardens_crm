@@ -6,10 +6,10 @@ const LOCALES = ['ru', 'hy'] as const;
 export async function seedMenu(strapi: Core.Strapi) {
   const existingSubCats = await strapi.documents('api::sub-category.sub-category').findMany({
     locale: 'en',
-    fields: ['slug'],
+    fields: ['title'],
     pagination: { pageSize: 200 },
   });
-  const existingSlugs = new Set(existingSubCats.map((s) => s.slug).filter(Boolean));
+  const existingTitles = new Set(existingSubCats.map((s) => s.title).filter(Boolean));
 
   const categories = await strapi.documents('api::category.category').findMany({
     locale: 'en',
@@ -17,7 +17,7 @@ export async function seedMenu(strapi: Core.Strapi) {
     fields: ['documentId', 'title', 'slug'],
   });
 
-  strapi.log.info(`[seed] Found ${categories.length} categories, ${existingSlugs.size} existing sub-categories`);
+  strapi.log.info(`[seed] Found ${categories.length} categories, ${existingTitles.size} existing sub-categories`);
   if (categories.length === 0) {
     strapi.log.warn('[seed] No published categories found, skipping seed');
     return;
@@ -44,8 +44,8 @@ export async function seedMenu(strapi: Core.Strapi) {
     strapi.log.info(`[seed] Seeding "${matched.title}" → ${seedEntry.subCategories.length} sub-categories`);
 
     for (const subData of seedEntry.subCategories) {
-      if (existingSlugs.has(subData.slug)) {
-        strapi.log.info(`[seed] Sub-category "${subData.slug}" already exists, skipping`);
+      if (existingTitles.has(subData.en.title)) {
+        strapi.log.info(`[seed] Sub-category "${subData.en.title}" already exists, skipping`);
         continue;
       }
 
@@ -53,7 +53,6 @@ export async function seedMenu(strapi: Core.Strapi) {
         data: {
           title: subData.en.title,
           subtitle: subData.en.subtitle,
-          slug: subData.slug,
           sortOrder: subData.sortOrder,
           category: { connect: [{ documentId: matched.documentId }] },
         } as any,
