@@ -6,6 +6,10 @@
     "description": "One footer column: can contain plain text OR a list of links (use one or the other)"
   },
   "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["links", "contacts", "social"]
+    },
     "title": {
       "type": "string"
     },

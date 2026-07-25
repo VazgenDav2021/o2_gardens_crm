@@ -27,6 +27,10 @@
       "type": "customField",
       "customField": "plugin::color-picker.color"
     },
+    "borderColor": {
+      "type": "customField",
+      "customField": "plugin::color-picker.color"
+    },
     "icon": {
       "type": "component",
       "component": "shared.icon",
