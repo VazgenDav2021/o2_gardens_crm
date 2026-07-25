@@ -48,6 +48,14 @@
       "required": false,
       "allowedTypes": ["images"]
     },
+    "quantityLabel": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "isActive": {
       "type": "boolean",
       "default": true
