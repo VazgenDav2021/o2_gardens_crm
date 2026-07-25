@@ -3,11 +3,50 @@
   "info": {
     "displayName": "Icon",
     "icon": "star",
-    "description": "Icon identifier (e.g. Heroicons or FontAwesome name)"
+    "description": "Lucide icon name used in the web project"
   },
   "attributes": {
     "name": {
-      "type": "string",
+      "type": "enumeration",
+      "enum": [
+        "arrow-right",
+        "building",
+        "cake",
+        "cake-slice",
+        "calendar",
+        "calendar-days",
+        "chevron-down",
+        "chevron-left",
+        "chevron-right",
+        "chevron-up",
+        "clock",
+        "coffee",
+        "edit",
+        "facebook",
+        "globe",
+        "grid-3x3",
+        "home",
+        "instagram",
+        "layout-grid",
+        "lock",
+        "mail",
+        "map-pin",
+        "menu",
+        "message-square",
+        "music",
+        "palette",
+        "phone",
+        "plus",
+        "save",
+        "send",
+        "trash-2",
+        "upload",
+        "user",
+        "users",
+        "utensils",
+        "wine",
+        "x"
+      ],
       "required": true
     }
   }
