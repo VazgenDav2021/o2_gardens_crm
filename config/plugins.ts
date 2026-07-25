@@ -27,7 +27,7 @@ export default ({ env }) => ({
     config: {
       endpoint: '/graphql',
       shadowCRUD: true,
-      playgroundAlways: process.env.NODE_ENV === 'development',
+      landingPage: true,
       depthLimit: 10,
       amountLimit: 100,
       apolloServer: {
