@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_layout_contact_sections",
+  "info": {
+    "displayName": "Contact Section",
+    "icon": "phone",
+    "description": "Contact section with title, text, and a list of address items"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "text"
+    },
+    "addressItems": {
+      "type": "component",
+      "component": "shared.address-item",
+      "repeatable": true
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_address_items",
+  "info": {
+    "displayName": "Address Item",
+    "icon": "house",
+    "description": "Address entry with title, multiple text blocks, and a map location"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "component",
+      "component": "shared.text-item",
+      "repeatable": true
+    },
+    "location": {
+      "type": "component",
+      "component": "shared.location",
+      "repeatable": false
+    }
+  }
+}

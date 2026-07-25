@@ -6,6 +6,10 @@
     "description": "Generic content section with title, subtitle, and a grid of cards"
   },
   "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["WhyChooseUs", "Salons", "OurEvents", "Slider"]
+    },
     "title": {
       "type": "string"
     },

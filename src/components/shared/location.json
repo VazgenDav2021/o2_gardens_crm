@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_shared_locations",
+  "info": {
+    "displayName": "Location",
+    "icon": "pinMap",
+    "description": "Geographic location with title, description, and coordinates"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "text"
+    },
+    "longitude": {
+      "type": "decimal"
+    },
+    "latitude": {
+      "type": "decimal"
+    }
+  }
+}
