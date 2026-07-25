@@ -15,9 +15,9 @@
     "details": {
       "type": "text"
     },
-    "image": {
+    "images": {
       "type": "media",
-      "multiple": false,
+      "multiple": true,
       "allowedTypes": ["images"]
     },
     "icon": {
