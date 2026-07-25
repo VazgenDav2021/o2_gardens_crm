@@ -41,6 +41,7 @@
         "layout.hero",
         "layout.section",
         "layout.menu-display",
+        "layout.hall-section",
         "layout.contact-us"
       ]
     }

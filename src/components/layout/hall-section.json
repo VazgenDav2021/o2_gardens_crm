@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_layout_hall_sections",
+  "info": {
+    "displayName": "Hall Section",
+    "icon": "layout",
+    "description": "Section header for the halls page — halls are auto-fetched from the Hall collection"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    }
+  }
+}
