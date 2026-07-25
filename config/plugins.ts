@@ -37,7 +37,6 @@ export default ({ env }) => ({
       amountLimit: 100,
       apolloServer: {
         tracing: false,
-        introspection: true,
       },
     },
   },
