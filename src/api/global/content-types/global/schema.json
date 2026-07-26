@@ -72,6 +72,10 @@
           "localized": true
         }
       }
+    },
+    "comingSoon": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
