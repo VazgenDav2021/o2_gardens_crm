@@ -8,7 +8,7 @@
   "attributes": {
     "type": {
       "type": "enumeration",
-      "enum": ["WhyChooseUs", "Salons", "OurEvents", "Slider"]
+      "enum": ["WhyChooseUs", "OurEvents", "Slider"]
     },
     "title": {
       "type": "string"
