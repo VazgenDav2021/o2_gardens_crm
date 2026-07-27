@@ -6,10 +6,20 @@
     "description": "Single slide for the hero slider: background, title, subtitle, and CTA button"
   },
   "attributes": {
+    "activeBackground": {
+      "type": "enumeration",
+      "enum": ["image", "video"],
+      "default": "image"
+    },
     "backgroundImage": {
       "type": "media",
       "multiple": false,
       "allowedTypes": ["images"]
+    },
+    "backgroundVideo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["videos"]
     },
     "backgroundColor": {
       "type": "customField",
