@@ -39,8 +39,12 @@
       }
     },
     "capacity": {
-      "type": "integer",
-      "default": 0
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     },
     "images": {
       "type": "media",
