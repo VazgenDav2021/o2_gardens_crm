@@ -8,8 +8,8 @@ export default [
         useDefaults: true,
         directives: {
           'connect-src': ["'self'", 'https:'],
-          'img-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io'],
-          'media-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io'],
+          'img-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', 'https://o2gardens-media.fra1.digitaloceanspaces.com'],
+          'media-src': ["'self'", 'data:', 'blob:', 'market-assets.strapi.io', 'https://o2gardens-media.fra1.digitaloceanspaces.com'],
           upgradeInsecureRequests: null,
         },
       },
