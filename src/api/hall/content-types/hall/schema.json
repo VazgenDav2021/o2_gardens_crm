@@ -38,6 +38,22 @@
         }
       }
     },
+    "shortDescription": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "longDescription": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
     "capacity": {
       "type": "string",
       "pluginOptions": {
@@ -45,6 +61,12 @@
           "localized": true
         }
       }
+    },
+    "mainImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
     },
     "images": {
       "type": "media",
@@ -59,6 +81,22 @@
           "localized": true
         }
       }
+    },
+    "hallStats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "hall.hall-stat"
+    },
+    "priceForFullyBooking": {
+      "type": "integer"
+    },
+    "minimumPersonCountForBooking": {
+      "type": "integer"
+    },
+    "eventTypes": {
+      "type": "component",
+      "repeatable": true,
+      "component": "hall.event-type"
     },
     "isActive": {
       "type": "boolean",

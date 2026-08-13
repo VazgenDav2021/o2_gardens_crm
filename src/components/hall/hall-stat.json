@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_hall_hall_stats",
+  "info": {
+    "displayName": "Hall Stat",
+    "icon": "hashtag",
+    "description": "Capacity stat item for a hall: quantity, label, and illustrative image"
+  },
+  "attributes": {
+    "qty": {
+      "type": "integer",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "img": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}
