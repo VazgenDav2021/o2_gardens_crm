@@ -38,14 +38,6 @@
         }
       }
     },
-    "shortDescription": {
-      "type": "text",
-      "pluginOptions": {
-        "i18n": {
-          "localized": true
-        }
-      }
-    },
     "longDescription": {
       "type": "richtext",
       "pluginOptions": {
