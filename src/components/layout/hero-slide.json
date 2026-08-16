@@ -31,10 +31,10 @@
     "subtitle": {
       "type": "string"
     },
-    "link": {
+    "links": {
       "type": "component",
       "component": "shared.link",
-      "repeatable": false
+      "repeatable": true
     }
   }
 }
