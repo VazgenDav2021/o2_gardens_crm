@@ -1,0 +1,1464 @@
+{
+  "info": {
+    "name": "O2 Gardens CRM — Full API",
+    "_postman_id": "o2gardens-crm-collection",
+    "description": "Complete Strapi 5 API collection for o2gardens CRM.\n\n**Setup (API Token):**\n1. Открой https://grove.o2cafeandrestaurant.com/admin/\n2. Settings → API Tokens → Create new API Token\n3. Name: Postman, Type: Full access, Duration: Unlimited\n4. Скопируй токен и вставь в Collection Variables → `token`\n\nВсе запросы используют Bearer {{token}} автоматически.\n\n**Variables:**\n- `baseUrl` — https://grove.o2cafeandrestaurant.com\n- `token` — вставить API Token из админки\n- `locale` — en или ru\n- `hallId`, `menuId`, `categoryId`, `subCategoryId`, `productId`, `pageId`",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl",       "value": "https://grove.o2cafeandrestaurant.com", "type": "string" },
+    { "key": "token",         "value": "",   "type": "string" },
+    { "key": "locale",        "value": "en", "type": "string" },
+    { "key": "hallId",        "value": "1",  "type": "string" },
+    { "key": "menuId",        "value": "1",  "type": "string" },
+    { "key": "categoryId",    "value": "1",  "type": "string" },
+    { "key": "subCategoryId", "value": "1",  "type": "string" },
+    { "key": "productId",     "value": "1",  "type": "string" },
+    { "key": "pageId",        "value": "1",  "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Ping API",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/_health",
+              "host": ["{{baseUrl}}"],
+              "path": ["_health"]
+            },
+            "description": "Проверка доступности сервера. Должен вернуть 204."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Halls",
+      "item": [
+        {
+          "name": "List Halls",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/halls?locale={{locale}}&populate[mainImage]=true&populate[images]=true&populate[hallStats]=true&populate[eventTypes]=true&sort=sortOrder:asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls"],
+              "query": [
+                { "key": "locale",                  "value": "{{locale}}" },
+                { "key": "populate[mainImage]",      "value": "true" },
+                { "key": "populate[images]",         "value": "true" },
+                { "key": "populate[hallStats]",      "value": "true" },
+                { "key": "populate[eventTypes]",     "value": "true" },
+                { "key": "sort",                     "value": "sortOrder:asc" },
+                { "key": "pagination[pageSize]",     "value": "25", "disabled": true },
+                { "key": "filters[isActive][$eq]",   "value": "true", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Hall by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/halls/{{hallId}}?locale={{locale}}&populate=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls", "{{hallId}}"],
+              "query": [
+                { "key": "locale",   "value": "{{locale}}" },
+                { "key": "populate", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Grand Hall\",\n    \"description\": \"Spacious hall for large events\",\n    \"longDescription\": \"<p>Full rich-text description here...</p>\",\n    \"capacity\": \"200-300\",\n    \"quantityLabel\": \"guests\",\n    \"priceForFullyBooking\": 5000,\n    \"minimumPersonCountForBooking\": 50,\n    \"isActive\": true,\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\",\n    \"hallStats\": [\n      { \"label\": \"Area\", \"value\": \"500 m2\" },\n      { \"label\": \"Height\", \"value\": \"5 m\" }\n    ],\n    \"eventTypes\": [\n      { \"name\": \"Wedding\" },\n      { \"name\": \"Corporate\" }\n    ]\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/halls",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls"]
+            },
+            "description": "Creates a draft hall. Use Publish request to make it live."
+          }
+        },
+        {
+          "name": "Update Hall",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Grand Hall (Updated)\",\n    \"description\": \"Updated description\",\n    \"capacity\": \"250-350\",\n    \"priceForFullyBooking\": 6000,\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/halls/{{hallId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls", "{{hallId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/halls/{{hallId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls", "{{hallId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/halls/{{hallId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls", "{{hallId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Hall",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/halls/{{hallId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "halls", "{{hallId}}"]
+            },
+            "description": "Permanent delete — cannot be undone."
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Menus",
+      "item": [
+        {
+          "name": "List Menus",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/menus?locale={{locale}}&populate[image]=true&populate[categories][populate][subCategories]=true&sort=sortOrder:asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus"],
+              "query": [
+                { "key": "locale",                                        "value": "{{locale}}" },
+                { "key": "populate[image]",                               "value": "true" },
+                { "key": "populate[categories][populate][subCategories]", "value": "true" },
+                { "key": "sort",                                          "value": "sortOrder:asc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Menu by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/menus/{{menuId}}?locale={{locale}}&populate=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus", "{{menuId}}"],
+              "query": [
+                { "key": "locale",   "value": "{{locale}}" },
+                { "key": "populate", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Main Menu\",\n    \"menuKind\": \"main\",\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/menus",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus"]
+            },
+            "description": "menuKind options: main | bar | combo | breakfast | lunch | delivery | other"
+          }
+        },
+        {
+          "name": "Update Menu",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Main Menu (Updated)\",\n    \"menuKind\": \"main\",\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/menus/{{menuId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus", "{{menuId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/menus/{{menuId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus", "{{menuId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/menus/{{menuId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus", "{{menuId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Menu",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/menus/{{menuId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "menus", "{{menuId}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "List Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/categories?locale={{locale}}&populate[menu]=true&populate[subCategories]=true&sort=sortOrder:asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"],
+              "query": [
+                { "key": "locale",                 "value": "{{locale}}" },
+                { "key": "populate[menu]",          "value": "true" },
+                { "key": "populate[subCategories]", "value": "true" },
+                { "key": "sort",                    "value": "sortOrder:asc" },
+                { "key": "filters[menu][id][$eq]",  "value": "{{menuId}}", "disabled": true }
+              ]
+            },
+            "description": "Enable the `filters[menu][id][$eq]` param to filter by a specific menu."
+          }
+        },
+        {
+          "name": "Get Category by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}?locale={{locale}}&populate=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"],
+              "query": [
+                { "key": "locale",   "value": "{{locale}}" },
+                { "key": "populate", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Hot Dishes\",\n    \"sortOrder\": 1,\n    \"menu\": {{menuId}},\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories"]
+            }
+          }
+        },
+        {
+          "name": "Update Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Hot Dishes (Updated)\",\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/{{categoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "categories", "{{categoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Sub-Categories",
+      "item": [
+        {
+          "name": "List Sub-Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories?locale={{locale}}&populate[category]=true&populate[products]=true&sort=sortOrder:asc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories"],
+              "query": [
+                { "key": "locale",                    "value": "{{locale}}" },
+                { "key": "populate[category]",         "value": "true" },
+                { "key": "populate[products]",         "value": "true" },
+                { "key": "sort",                       "value": "sortOrder:asc" },
+                { "key": "filters[category][id][$eq]", "value": "{{categoryId}}", "disabled": true }
+              ]
+            },
+            "description": "Enable `filters[category][id][$eq]` to filter by category."
+          }
+        },
+        {
+          "name": "Get Sub-Category by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories/{{subCategoryId}}?locale={{locale}}&populate=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories", "{{subCategoryId}}"],
+              "query": [
+                { "key": "locale",   "value": "{{locale}}" },
+                { "key": "populate", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Grilled\",\n    \"subtitle\": \"From the grill\",\n    \"sortOrder\": 1,\n    \"category\": {{categoryId}},\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories"]
+            }
+          }
+        },
+        {
+          "name": "Update Sub-Category",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"Grilled (Updated)\",\n    \"subtitle\": \"Fresh from the grill\",\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories", "{{subCategoryId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories/{{subCategoryId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories", "{{subCategoryId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories/{{subCategoryId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories", "{{subCategoryId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Sub-Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/sub-categories/{{subCategoryId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "sub-categories", "{{subCategoryId}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/products?locale={{locale}}&populate[photo]=true&populate[subCategory][populate][category][populate][menu]=true&sort=sortOrder:asc&pagination[pageSize]=50",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"],
+              "query": [
+                { "key": "locale",                                                    "value": "{{locale}}" },
+                { "key": "populate[photo]",                                            "value": "true" },
+                { "key": "populate[subCategory][populate][category][populate][menu]",  "value": "true" },
+                { "key": "sort",                                                       "value": "sortOrder:asc" },
+                { "key": "pagination[pageSize]",                                       "value": "50" },
+                { "key": "filters[subCategory][id][$eq]",                              "value": "{{subCategoryId}}", "disabled": true },
+                { "key": "filters[isAvailable][$eq]",                                  "value": "true", "disabled": true }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Product by ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}?locale={{locale}}&populate=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"],
+              "query": [
+                { "key": "locale",   "value": "{{locale}}" },
+                { "key": "populate", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Caesar Salad\",\n    \"description\": \"Classic caesar with croutons and parmesan\",\n    \"price\": 12.50,\n    \"isAvailable\": true,\n    \"sortOrder\": 1,\n    \"subCategory\": {{subCategoryId}},\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products"]
+            },
+            "description": "To attach a photo: upload via Media Upload first, then add the returned file ID as `\"photo\": <fileId>`."
+          }
+        },
+        {
+          "name": "Update Product",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"name\": \"Caesar Salad (Updated)\",\n    \"price\": 13.00,\n    \"isAvailable\": true,\n    \"sortOrder\": 1,\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/products/{{productId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "products", "{{productId}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Pages",
+      "item": [
+        {
+          "name": "List Pages",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/pages?locale={{locale}}&populate[seo]=true&fields[0]=title&fields[1]=slug&fields[2]=publishedAt",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages"],
+              "query": [
+                { "key": "locale",        "value": "{{locale}}" },
+                { "key": "populate[seo]", "value": "true" },
+                { "key": "fields[0]",     "value": "title" },
+                { "key": "fields[1]",     "value": "slug" },
+                { "key": "fields[2]",     "value": "publishedAt" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Page by ID (full)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/pages/{{pageId}}?locale={{locale}}&populate[seo]=true&populate[blocks][populate]=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages", "{{pageId}}"],
+              "query": [
+                { "key": "locale",                     "value": "{{locale}}" },
+                { "key": "populate[seo]",              "value": "true" },
+                { "key": "populate[blocks][populate]", "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Page by Slug",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/pages?filters[slug][$eq]=home&locale={{locale}}&populate[seo]=true&populate[blocks][populate]=*",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages"],
+              "query": [
+                { "key": "filters[slug][$eq]",         "value": "home" },
+                { "key": "locale",                      "value": "{{locale}}" },
+                { "key": "populate[seo]",               "value": "true" },
+                { "key": "populate[blocks][populate]",  "value": "*" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"About Us\",\n    \"slug\": \"about-us\",\n    \"locale\": \"{{locale}}\",\n    \"seo\": {\n      \"metaTitle\": \"About Us - O2 Gardens\",\n      \"metaDescription\": \"Learn more about O2 Gardens restaurant.\"\n    },\n    \"blocks\": []\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pages",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages"]
+            }
+          }
+        },
+        {
+          "name": "Update Page",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"data\": {\n    \"title\": \"About Us (Updated)\",\n    \"locale\": \"{{locale}}\",\n    \"seo\": {\n      \"metaTitle\": \"About O2 Gardens\",\n      \"metaDescription\": \"Updated meta description.\"\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/pages/{{pageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages", "{{pageId}}"]
+            }
+          }
+        },
+        {
+          "name": "Publish Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/pages/{{pageId}}/actions/publish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages", "{{pageId}}", "actions", "publish"]
+            }
+          }
+        },
+        {
+          "name": "Unpublish Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/pages/{{pageId}}/actions/unpublish",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages", "{{pageId}}", "actions", "unpublish"]
+            }
+          }
+        },
+        {
+          "name": "Delete Page",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/pages/{{pageId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "pages", "{{pageId}}"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "Media Upload",
+      "item": [
+        {
+          "name": "Upload File",
+          "request": {
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "description": "Select your image file here"
+                },
+                {
+                  "key": "ref",
+                  "value": "api::hall.hall",
+                  "type": "text",
+                  "description": "Content type UID. Examples: api::hall.hall | api::menu.menu | api::product.product"
+                },
+                {
+                  "key": "refId",
+                  "value": "{{hallId}}",
+                  "type": "text",
+                  "description": "The record ID to attach the file to"
+                },
+                {
+                  "key": "field",
+                  "value": "mainImage",
+                  "type": "text",
+                  "description": "Field name: mainImage / images (hall), image (menu), photo (product)"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/upload",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload"]
+            },
+            "description": "Upload an image and optionally attach it to a record.\n\nOr upload without ref/refId and use the returned file ID in a PUT request body."
+          }
+        },
+        {
+          "name": "List Uploaded Files",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/files?pagination[pageSize]=20&sort=createdAt:desc",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload", "files"],
+              "query": [
+                { "key": "pagination[pageSize]", "value": "20" },
+                { "key": "sort",                  "value": "createdAt:desc" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete File",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/upload/files/:fileId",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "upload", "files", ":fileId"],
+              "variable": [{ "key": "fileId", "value": "1" }]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Halls",
+      "item": [
+        {
+          "name": "GQL | List Halls",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListHalls($locale: I18NLocaleCode, $status: PublicationStatus) {\\n  halls(locale: $locale, status: $status, sort: [\\\"sortOrder:asc\\\"]) {\\n    documentId\\n    name\\n    slug\\n    description\\n    capacity\\n    quantityLabel\\n    priceForFullyBooking\\n    minimumPersonCountForBooking\\n    isActive\\n    sortOrder\\n    publishedAt\\n    mainImage { url name }\\n    images { url name }\\n    hallStats { label value }\\n    eventTypes { name }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "status: PUBLISHED | DRAFT"
+          }
+        },
+        {
+          "name": "GQL | Get Hall by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetHall($documentId: ID!, $locale: I18NLocaleCode) {\\n  hall(documentId: $documentId, locale: $locale) {\\n    documentId\\n    name\\n    slug\\n    description\\n    longDescription\\n    capacity\\n    quantityLabel\\n    priceForFullyBooking\\n    minimumPersonCountForBooking\\n    isActive\\n    sortOrder\\n    publishedAt\\n    mainImage { url name width height }\\n    images { url name }\\n    hallStats { label value }\\n    eventTypes { name }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Create Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateHall($data: HallInput!) {\\n  createHall(data: $data) {\\n    documentId\\n    name\\n    slug\\n    publishedAt\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"name\": \"Grand Hall\",\n      \"description\": \"Spacious hall for large events\",\n      \"longDescription\": \"<p>Full description...</p>\",\n      \"capacity\": \"200-300\",\n      \"quantityLabel\": \"guests\",\n      \"priceForFullyBooking\": 5000,\n      \"minimumPersonCountForBooking\": 50,\n      \"isActive\": true,\n      \"sortOrder\": 1,\n      \"locale\": \"{{locale}}\",\n      \"hallStats\": [\n        { \"label\": \"Area\", \"value\": \"500 m2\" },\n        { \"label\": \"Height\", \"value\": \"5 m\" }\n      ],\n      \"eventTypes\": [\n        { \"name\": \"Wedding\" },\n        { \"name\": \"Corporate\" }\n      ]\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Update Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateHall($documentId: ID!, $data: HallInput!) {\\n  updateHall(documentId: $documentId, data: $data) {\\n    documentId\\n    name\\n    slug\\n    capacity\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"name\": \"Grand Hall (Updated)\",\n      \"capacity\": \"250-350\",\n      \"priceForFullyBooking\": 6000,\n      \"sortOrder\": 1\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Publish Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishHall($documentId: ID!) {\\n  publishHall(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishHall($documentId: ID!) {\\n  unpublishHall(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Delete Hall",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteHall($documentId: ID!) {\\n  deleteHall(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Menus",
+      "item": [
+        {
+          "name": "GQL | List Menus",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListMenus($locale: I18NLocaleCode, $status: PublicationStatus) {\\n  menus(locale: $locale, status: $status, sort: [\\\"sortOrder:asc\\\"]) {\\n    documentId\\n    name\\n    slug\\n    menuKind\\n    sortOrder\\n    publishedAt\\n    image { url name }\\n    categories {\\n      documentId\\n      title\\n      slug\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Get Menu by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetMenu($documentId: ID!, $locale: I18NLocaleCode) {\\n  menu(documentId: $documentId, locale: $locale) {\\n    documentId\\n    name\\n    slug\\n    menuKind\\n    sortOrder\\n    publishedAt\\n    image { url name }\\n    categories {\\n      documentId\\n      title\\n      slug\\n      subCategories {\\n        documentId\\n        title\\n        slug\\n      }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Create Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateMenu($data: MenuInput!) {\\n  createMenu(data: $data) {\\n    documentId\\n    name\\n    slug\\n    menuKind\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"name\": \"Main Menu\",\n      \"menuKind\": \"main\",\n      \"sortOrder\": 1,\n      \"locale\": \"{{locale}}\"\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            },
+            "description": "menuKind: main | bar | combo | breakfast | lunch | delivery | other"
+          }
+        },
+        {
+          "name": "GQL | Update Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateMenu($documentId: ID!, $data: MenuInput!) {\\n  updateMenu(documentId: $documentId, data: $data) {\\n    documentId\\n    name\\n    menuKind\\n    sortOrder\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"name\": \"Main Menu (Updated)\",\n      \"sortOrder\": 1\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": ["{{baseUrl}}"],
+              "path": ["graphql"]
+            }
+          }
+        },
+        {
+          "name": "GQL | Publish Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishMenu($documentId: ID!) {\\n  publishMenu(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishMenu($documentId: ID!) {\\n  unpublishMenu(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Delete Menu",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteMenu($documentId: ID!) {\\n  deleteMenu(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Categories",
+      "item": [
+        {
+          "name": "GQL | List Categories",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListCategories($locale: I18NLocaleCode, $status: PublicationStatus, $menuId: ID) {\\n  categories(\\n    locale: $locale\\n    status: $status\\n    filters: { menu: { documentId: { eq: $menuId } } }\\n    sort: [\\\"sortOrder:asc\\\"]\\n  ) {\\n    documentId\\n    title\\n    slug\\n    sortOrder\\n    publishedAt\\n    menu { documentId name }\\n    subCategories { documentId title slug }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\",\n    \"menuId\": null\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] },
+            "description": "Set menuId to filter by menu, or leave null to get all categories."
+          }
+        },
+        {
+          "name": "GQL | Get Category by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetCategory($documentId: ID!, $locale: I18NLocaleCode) {\\n  category(documentId: $documentId, locale: $locale) {\\n    documentId\\n    title\\n    slug\\n    sortOrder\\n    publishedAt\\n    menu { documentId name }\\n    subCategories {\\n      documentId\\n      title\\n      subtitle\\n      slug\\n      products { documentId name price }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Create Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateCategory($data: CategoryInput!) {\\n  createCategory(data: $data) {\\n    documentId\\n    title\\n    slug\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"title\": \"Hot Dishes\",\n      \"sortOrder\": 1,\n      \"menu\": \"REPLACE_WITH_MENU_DOCUMENT_ID\",\n      \"locale\": \"{{locale}}\"\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Update Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateCategory($documentId: ID!, $data: CategoryInput!) {\\n  updateCategory(documentId: $documentId, data: $data) {\\n    documentId\\n    title\\n    sortOrder\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"title\": \"Hot Dishes (Updated)\",\n      \"sortOrder\": 1\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Publish Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishCategory($documentId: ID!) {\\n  publishCategory(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishCategory($documentId: ID!) {\\n  unpublishCategory(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Delete Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteCategory($documentId: ID!) {\\n  deleteCategory(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Sub-Categories",
+      "item": [
+        {
+          "name": "GQL | List Sub-Categories",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListSubCategories($locale: I18NLocaleCode, $status: PublicationStatus, $categoryId: ID) {\\n  subCategories(\\n    locale: $locale\\n    status: $status\\n    filters: { category: { documentId: { eq: $categoryId } } }\\n    sort: [\\\"sortOrder:asc\\\"]\\n  ) {\\n    documentId\\n    title\\n    subtitle\\n    slug\\n    sortOrder\\n    publishedAt\\n    category { documentId title }\\n    products { documentId name price isAvailable }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\",\n    \"categoryId\": null\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] },
+            "description": "Set categoryId to filter by category, or leave null for all."
+          }
+        },
+        {
+          "name": "GQL | Get Sub-Category by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetSubCategory($documentId: ID!, $locale: I18NLocaleCode) {\\n  subCategory(documentId: $documentId, locale: $locale) {\\n    documentId\\n    title\\n    subtitle\\n    slug\\n    sortOrder\\n    publishedAt\\n    category { documentId title }\\n    products {\\n      documentId\\n      name\\n      description\\n      price\\n      isAvailable\\n      photo { url }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Create Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateSubCategory($data: SubCategoryInput!) {\\n  createSubCategory(data: $data) {\\n    documentId\\n    title\\n    slug\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"title\": \"Grilled\",\n      \"subtitle\": \"From the grill\",\n      \"sortOrder\": 1,\n      \"category\": \"REPLACE_WITH_CATEGORY_DOCUMENT_ID\",\n      \"locale\": \"{{locale}}\"\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Update Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateSubCategory($documentId: ID!, $data: SubCategoryInput!) {\\n  updateSubCategory(documentId: $documentId, data: $data) {\\n    documentId\\n    title\\n    subtitle\\n    sortOrder\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"title\": \"Grilled (Updated)\",\n      \"subtitle\": \"Fresh from the grill\",\n      \"sortOrder\": 1\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Publish Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishSubCategory($documentId: ID!) {\\n  publishSubCategory(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishSubCategory($documentId: ID!) {\\n  unpublishSubCategory(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Delete Sub-Category",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteSubCategory($documentId: ID!) {\\n  deleteSubCategory(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Products",
+      "item": [
+        {
+          "name": "GQL | List Products",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListProducts($locale: I18NLocaleCode, $status: PublicationStatus, $subCategoryId: ID) {\\n  products(\\n    locale: $locale\\n    status: $status\\n    filters: { subCategory: { documentId: { eq: $subCategoryId } } }\\n    sort: [\\\"sortOrder:asc\\\"]\\n    pagination: { pageSize: 50 }\\n  ) {\\n    documentId\\n    name\\n    description\\n    price\\n    isAvailable\\n    sortOrder\\n    publishedAt\\n    photo { url name }\\n    subCategory { documentId title }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\",\n    \"subCategoryId\": null\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] },
+            "description": "Set subCategoryId to filter, or leave null for all products."
+          }
+        },
+        {
+          "name": "GQL | Get Product by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetProduct($documentId: ID!, $locale: I18NLocaleCode) {\\n  product(documentId: $documentId, locale: $locale) {\\n    documentId\\n    name\\n    description\\n    price\\n    isAvailable\\n    sortOrder\\n    publishedAt\\n    photo { url name width height }\\n    subCategory {\\n      documentId\\n      title\\n      category { documentId title }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Create Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreateProduct($data: ProductInput!) {\\n  createProduct(data: $data) {\\n    documentId\\n    name\\n    price\\n    slug\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"name\": \"Caesar Salad\",\n      \"description\": \"Classic caesar with croutons and parmesan\",\n      \"price\": 12.50,\n      \"isAvailable\": true,\n      \"sortOrder\": 1,\n      \"subCategory\": \"REPLACE_WITH_SUBCATEGORY_DOCUMENT_ID\",\n      \"locale\": \"{{locale}}\"\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Update Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdateProduct($documentId: ID!, $data: ProductInput!) {\\n  updateProduct(documentId: $documentId, data: $data) {\\n    documentId\\n    name\\n    price\\n    isAvailable\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"name\": \"Caesar Salad (Updated)\",\n      \"price\": 13.00,\n      \"isAvailable\": true\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Publish Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishProduct($documentId: ID!) {\\n  publishProduct(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishProduct($documentId: ID!) {\\n  unpublishProduct(documentId: $documentId) {\\n    documentId\\n    name\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Delete Product",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeleteProduct($documentId: ID!) {\\n  deleteProduct(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "GraphQL — Pages",
+      "item": [
+        {
+          "name": "GQL | List Pages",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query ListPages($locale: I18NLocaleCode, $status: PublicationStatus) {\\n  pages(locale: $locale, status: $status) {\\n    documentId\\n    title\\n    slug\\n    publishedAt\\n    seo { metaTitle metaDescription }\\n  }\\n}\",\n  \"variables\": {\n    \"locale\": \"{{locale}}\",\n    \"status\": \"PUBLISHED\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Get Page by documentId",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetPage($documentId: ID!, $locale: I18NLocaleCode) {\\n  page(documentId: $documentId, locale: $locale) {\\n    documentId\\n    title\\n    slug\\n    publishedAt\\n    seo { metaTitle metaDescription keywords shareImage { url } }\\n    blocks {\\n      __typename\\n      ... on ComponentLayoutHero {\\n        id\\n        title\\n        subtitle\\n      }\\n      ... on ComponentLayoutSection {\\n        id\\n        title\\n        content\\n      }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Get Page by Slug",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"query GetPageBySlug($slug: String!, $locale: I18NLocaleCode) {\\n  pages(filters: { slug: { eq: $slug } }, locale: $locale) {\\n    documentId\\n    title\\n    slug\\n    publishedAt\\n    seo { metaTitle metaDescription }\\n    blocks {\\n      __typename\\n      ... on ComponentLayoutHero {\\n        id\\n        title\\n        subtitle\\n      }\\n      ... on ComponentLayoutSection {\\n        id\\n        title\\n        content\\n      }\\n    }\\n  }\\n}\",\n  \"variables\": {\n    \"slug\": \"home\",\n    \"locale\": \"{{locale}}\"\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Create Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation CreatePage($data: PageInput!) {\\n  createPage(data: $data) {\\n    documentId\\n    title\\n    slug\\n  }\\n}\",\n  \"variables\": {\n    \"data\": {\n      \"title\": \"About Us\",\n      \"slug\": \"about-us\",\n      \"locale\": \"{{locale}}\",\n      \"seo\": {\n        \"metaTitle\": \"About Us - O2 Gardens\",\n        \"metaDescription\": \"Learn more about O2 Gardens restaurant.\"\n      }\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Update Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UpdatePage($documentId: ID!, $data: PageInput!) {\\n  updatePage(documentId: $documentId, data: $data) {\\n    documentId\\n    title\\n    slug\\n  }\\n}\",\n  \"variables\": {\n    \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\",\n    \"data\": {\n      \"title\": \"About Us (Updated)\",\n      \"seo\": {\n        \"metaTitle\": \"About O2 Gardens\",\n        \"metaDescription\": \"Updated meta description.\"\n      }\n    }\n  }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Publish Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation PublishPage($documentId: ID!) {\\n  publishPage(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Unpublish Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation UnpublishPage($documentId: ID!) {\\n  unpublishPage(documentId: $documentId) {\\n    documentId\\n    title\\n    publishedAt\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Delete Page",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"mutation DeletePage($documentId: ID!) {\\n  deletePage(documentId: $documentId) {\\n    documentId\\n  }\\n}\",\n  \"variables\": { \"documentId\": \"REPLACE_WITH_DOCUMENT_ID\" }\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] }
+          }
+        },
+        {
+          "name": "GQL | Introspection (explore schema)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"{ __schema { queryType { name } mutationType { name } types { name kind } } }\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": { "raw": "{{baseUrl}}/graphql", "host": ["{{baseUrl}}"], "path": ["graphql"] },
+            "description": "Returns all available types in the GraphQL schema. Useful for exploring what's available."
+          }
+        }
+      ]
+    }
+
+  ]
+}
