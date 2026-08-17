@@ -90,6 +90,12 @@
       "repeatable": true,
       "component": "hall.event-type"
     },
+    "hallVideo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["videos"]
+    },
     "isActive": {
       "type": "boolean",
       "default": true
